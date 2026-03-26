@@ -1,0 +1,482 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+const int size=20;
+void add();
+void view();
+void search();
+void update();
+void deletedonor();
+void print();
+struct donor
+{	
+	string name;
+    int age;
+    string gender;
+    string bloodgroup;
+    string contactNumber;
+    string city;
+    string donationDate;
+    int donorID;
+};
+
+donor donors[size];
+int count = 0;
+int ID = 100;
+int main()
+{
+    int choice;
+    cout << "\n=============================================\n";
+	cout << "   BLOOD DONOR MANAGEMENT SYSTEM\n";
+	cout << "=============================================\n";
+	do
+    {
+        cout << "\n------------- MAIN MENU -------------\n";
+    	cout << " 1. Add Donor\n";
+	    cout << " 2. View Donors\n";
+	    cout << " 3. Search Donor\n";
+	    cout << " 4. Update Donor\n";
+	    cout << " 5. Delete Donor\n";
+	    cout << " 6. Exit\n";
+    	cout << "-------------------------------------\n";
+        cout << "Enter your choice : ";
+        cin >> choice;
+        switch (choice)
+        {
+            case 1:
+                add();
+                break;
+            case 2:
+                view();
+                break;
+            case 3:
+                search();
+                break;
+            case 4:
+                update();
+                break;
+            case 5:
+                deletedonor();
+                break;
+            case 6:
+                cout << "\nThank you for using the system.\n";
+   				cout << "Exiting program...\n";
+                return 0;
+            default:
+                cout<<"\nInvalid option! Please choose a valid menu option.\n";
+        }
+        cout << "\nPress Enter to continue...";
+        cin.ignore();
+        cin.get();
+    } while (choice != 6);
+}
+void add()
+{
+	if (count<size)
+	{
+	cout << "\n--- Add New Donor ---\n";
+    cout<<"Enter donor name : ";
+    cin.ignore();
+    getline(cin, donors[count].name);
+     if (donors[count].name.empty())
+        {
+            cout << "Name cannot be empty.\n";
+            return;
+        }
+    cout<<"Enter donors age : ";
+    cin>>donors[count].age;
+	if (donors[count].age < 18)
+    {
+        cout<<"Donor is under age and not eligible for donation.\n";
+        return;
+    }
+    else if (donors[count].age > 50)
+    {
+        cout << "Donor is over age and not eligible for donation.\n";
+    	return;
+    }
+    cout << "\nGender of the Donor\n";
+    cout << "1. Male\n";
+    cout << "2. Female\n";
+	int choice;
+	cout<<"Enter choice : ";
+    cin >> choice;
+    switch (choice)
+    {
+        case 1:
+            donors[count].gender = "Male";
+            break;
+        case 2:
+            donors[count].gender = "Female";
+            break;
+        default:
+            cout << "Invalid gender selection.\n";
+            return;	
+    }
+    cout << "\nBlood Group of Donor\n";
+   	cout << "1. A+   2. A-\n";
+	cout << "3. B+   4. B-\n";
+	cout << "5. O+   6. O-\n";
+	cout << "7. AB+  8. AB-\n";
+    int bgoption;
+    cout << "Choose an option ";
+    cin >> bgoption;
+    switch (bgoption)
+    {
+        case 1:
+            donors[count].bloodgroup = "A+";
+            break;
+        case 2:
+            donors[count].bloodgroup = "A-";
+            break;
+        case 3:
+            donors[count].bloodgroup = "B+";
+            break;
+        case 4:
+            donors[count].bloodgroup = "B-";
+            break;
+        case 5:
+            donors[count].bloodgroup = "O+";
+            break;
+        case 6:
+            donors[count].bloodgroup = "O-";
+            break;
+        case 7:
+            donors[count].bloodgroup = "AB+";
+            break;
+        case 8:
+            donors[count].bloodgroup = "AB-";
+            break;
+        default:
+            cout << "Invalid blood group selection.\n";
+            return;
+    }
+    cin.ignore();
+    cout << "Enter donors city: ";
+    getline(cin, donors[count].city);
+    if (donors[count].city.empty())
+        {
+            cout << "City cannot be empty.\n";
+            return;
+        }
+    bool validNumber;
+    do
+    {	
+    	validNumber=true;
+		cout << "Enter donor's contact number (11 digits) : ";
+        getline(cin, donors[count].contactNumber);
+        if (donors[count].contactNumber.length()!=11)
+        {
+            cout << "Contact number must be exactly 11 digits.\n";
+            validNumber=false;
+            continue;
+        }
+        
+    if (count > 0)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            if (donors[i].contactNumber == donors[count].contactNumber)
+            {
+                cout << "This contact number already exists.\n";
+                validNumber = false;
+                break;
+            }
+        }
+    } 
+	}while (!validNumber);
+    cout<<"Enter donation date : ";
+    getline(cin, donors[count].donationDate);
+    if (donors[count].donationDate.empty())
+        {
+            cout << "Donation date cannot be empty.\n";
+            return;
+        }
+    donors[count].donorID = ID++;
+    count++;
+    cout << "\nDonor record added successfully!\n";
+	}
+	else
+	{
+		cout<<"Database is full. Cannot add more donors.\n";
+	}
+}
+void view()
+{
+    if (count > 0)
+    {
+        cout << "\n===============================================================\n";
+        cout << "                     DONORS INFORMATION\n";
+        cout << "===============================================================\n";
+        cout << left  
+             << setw(5)  << "SNo"
+             << setw(5)  << "ID"
+             << setw(20) << "Name"
+             << setw(5)  << "Age"
+             << setw(10) << "Gender"
+             << setw(12) << "Blood Group"
+             << setw(15) << "City"
+             << setw(15) << "Contact No"
+             << setw(15) << "Last Donation" 
+             << endl;
+        cout << "---------------------------------------------------------------"
+             << "-------------------------------------------------\n";
+        for (int i = 0; i < count; i++)
+        {
+            cout << left
+                 << setw(5)  << i + 1
+                 << setw(5)  << donors[i].donorID
+                 << setw(20) << donors[i].name
+                 << setw(5)  << donors[i].age
+                 << setw(10) << donors[i].gender
+                 << setw(12) << donors[i].bloodgroup
+                 << setw(15) << donors[i].city
+                 << setw(15) << donors[i].contactNumber
+                 << setw(15) << donors[i].donationDate
+                 << endl;
+        }
+        cout << "================================================================================================================\n";
+    }
+    else
+    {
+        cout<<"\nNo donor records available.\n";
+    }
+}
+void search()
+{
+	int donorscount=0,choice;
+    string bloodgroup;
+    bool found = false;
+    cout<<"------------- SEARCH MENU -------------"<<endl;
+    cout<<"1. Search by Blood Group"<<endl;
+    cout<<"2. Search by Donor ID"<<endl;
+    cout<<"3. Search by City"<<endl;
+    cout<<"4. Back to Main Menu"<<endl;
+    cout<<"---------------------------------------";
+    cout<<"Enter your choice : ";
+    cin>>choice;
+    if (choice == 4)
+    return;
+    int serial = 1;
+    switch (choice)
+    {
+        case 1:   
+        {
+            string bloodgroup;
+            cout << "Enter blood group: ";
+            cin >> bloodgroup;
+            print();
+            for (int i = 0; i < count; i++)
+            {
+                if (donors[i].bloodgroup == bloodgroup)
+                {
+                    cout << left
+                         << setw(5)  << serial++
+                         << setw(6)  << donors[i].donorID
+                         << setw(20) << donors[i].name
+                         << setw(6)  << donors[i].age
+                         << setw(10) << donors[i].gender
+                         << setw(13) << donors[i].bloodgroup
+                         << setw(15) << donors[i].city
+                         << setw(15) << donors[i].contactNumber
+                         << setw(15) << donors[i].donationDate
+                         << endl;
+                    found = true;
+                    donorscount++;
+                }
+            }
+            cout<<"Number of donors found are "<<donorscount;
+            break;
+        }
+        case 2:   
+        {
+            int id;
+            cout << "Enter Donor ID: ";
+            cin >> id;
+			print();
+            for (int i = 0; i < count; i++)
+            {
+                if (donors[i].donorID == id)
+                {
+                    cout << left
+                         << setw(5)  << serial++
+                         << setw(6)  << donors[i].donorID
+                         << setw(20) << donors[i].name
+                         << setw(6)  << donors[i].age
+                         << setw(10) << donors[i].gender
+                         << setw(13) << donors[i].bloodgroup
+                         << setw(15) << donors[i].city
+                         << setw(15) << donors[i].contactNumber
+                         << setw(15) << donors[i].donationDate
+                         << endl;
+                    found = true;
+                    donorscount++;
+                    break;
+                }
+            }
+            cout<<"Number of donors found are "<<donorscount;
+            break;
+        }
+        case 3:   
+        {
+            string city;
+            cin.ignore();
+            cout << "Enter City: ";
+            getline(cin, city);
+            print();
+            for (int i = 0; i < count; i++)
+            {
+                if (donors[i].city == city)
+                {
+                    cout << left
+                         << setw(5)  << serial++
+                         << setw(6)  << donors[i].donorID
+                         << setw(20) << donors[i].name
+                         << setw(6)  << donors[i].age
+                         << setw(10) << donors[i].gender
+                         << setw(13) << donors[i].bloodgroup
+                         << setw(15) << donors[i].city
+                         << setw(15) << donors[i].contactNumber
+                         << setw(15) << donors[i].donationDate
+                         << endl;
+                    found = true;
+                    donorscount++;
+                }
+            }
+            break;
+        }
+        cout<<"Number of donors found are "<<donorscount;
+        default:
+            cout << "Invalid search option.\n";
+            return;
+    }
+    if (!found)
+    {
+        cout << "\nNo matching donor found.\n";
+    }
+}
+void update()
+{
+    int ID, option;
+    bool found = false;
+    int index;
+    cout << "Enter ID of donor to update info";
+    cin >> ID;
+    for (int i = 0; i < count; i++)
+    {
+        if (donors[i].donorID == ID)
+        {
+            found=true;
+            index = i;
+            break;
+        }
+    }
+    if (found == false)
+    {
+        cout<<"\nNo ID Found "<<endl;
+        return;
+    }
+    else
+	{
+    cout << "\nChoose what to update: " << endl;
+    cout << "1. Contact number" << endl;
+    cout << "2. Last donation date" << endl;
+    cin >> option;
+    cin.ignore();
+    switch (option)
+    {
+        case 1:
+        {
+            string newNumber;
+            bool valid;
+            do
+            {
+                valid = true;
+                cout << "Enter new contact number: ";
+                getline(cin, newNumber);
+                if (newNumber.length() != 11)
+                {
+                    cout << "Invalid number length" << endl;
+                    valid = false;
+                    continue;
+                }
+                for (int i = 0; i < count; i++)
+                {
+                    if (i != index && donors[i].contactNumber == newNumber)
+                    {
+                        cout << "This contact number already exists." << endl;
+                        valid = false;
+                        break;
+                    }
+                }
+            } while (!valid);
+            donors[index].contactNumber = newNumber;
+            cout << "Contact number updated successfully." << endl;
+            break;
+        }
+        case 2:
+        {
+            cout << "\nEnter new donation date : ";
+            getline(cin, donors[index].donationDate);
+            break;
+        }
+        default:
+            cout << "Invalid option";
+    }
+	}
+}
+void deletedonor()
+{
+    int ID, index;
+    bool found = 0;
+    cout << "Enter ID to delete : " << endl;
+    cin >> ID;
+    for (int i=0; i<count; i++)
+    {
+        if (ID == donors[i].donorID)
+        {
+            found = 1;
+            index = i;
+            break;
+        }
+    }
+    if (found == 1)
+    {
+        for (int i = index; i < count - 1; i++)
+        {
+            donors[i].name = donors[i + 1].name;
+            donors[i].age = donors[i + 1].age;
+            donors[i].gender = donors[i + 1].gender;
+            donors[i].city = donors[i + 1].city;
+            donors[i].donationDate = donors[i + 1].donationDate;
+            donors[i].contactNumber = donors[i + 1].contactNumber;
+            donors[i].bloodgroup = donors[i + 1].bloodgroup;
+            donors[i].donorID=donors[i+1].donorID;
+        }
+        cout<<"\nRecord deleted successfully. "<< endl;
+        count--;
+    }
+    else
+    {
+        cout<<"Record not found "<<endl;
+        return;
+    }
+}
+void print()
+{
+	cout << "\nDonors Information...\n";
+    cout << left
+         << setw(5)  << "SNo"
+         << setw(6)  << "ID"
+         << setw(20) << "Name"
+         << setw(6)  << "Age"
+         << setw(10) << "Gender"
+         << setw(13) << "Blood Group"
+         << setw(15) << "City"
+         << setw(15) << "Contact No"
+         << setw(15) << "Last Donation"
+         << endl;
+          cout << "---------------------------------------------------------------"
+         << "-------------------------------------------------\n";
+}
+
