@@ -36,3 +36,17 @@ Functions
 Input validation
 Loops & conditionals
 Formatted output (iomanip)
+
+### Data Rules & Constraints
+#### Maximum donors: 20
+#### Eligible age: 18 to 50 years
+#### Contact number:
+Must be exactly 11 digits
+Must be unique
+#### Required fields:
+Name
+City
+Donation Date
+
+####Author
+Developed by Zubair Ahmad
